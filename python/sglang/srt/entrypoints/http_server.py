@@ -42,6 +42,7 @@ from fastapi import Depends, FastAPI, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse, Response, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from sglang.srt.disaggregation.utils import (
     FAKE_BOOTSTRAP_HOST,
@@ -171,6 +172,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files for frontend
+import pathlib
+frontend_dir = pathlib.Path(__file__).parent.parent.parent.parent / "frontend"
+if frontend_dir.exists():
+    app.mount("/frontend", StaticFiles(directory=str(frontend_dir)), name="frontend")
+
 
 # Custom exception handlers to change validation error status codes
 @app.exception_handler(RequestValidationError)
@@ -213,6 +220,16 @@ async def validate_json_request(raw_request: Request):
 
 
 HEALTH_CHECK_TIMEOUT = int(os.getenv("SGLANG_HEALTH_CHECK_TIMEOUT", 20))
+
+
+##### Frontend redirect #####
+
+from fastapi.responses import RedirectResponse
+
+@app.get("/")
+async def root():
+    """Redirect root to frontend interface."""
+    return RedirectResponse(url="/frontend/index.html")
 
 
 ##### Native API endpoints #####

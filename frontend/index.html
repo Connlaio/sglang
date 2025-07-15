@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGLang Chat Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SGLang Chat Interface</h1>
+            <div class="config-section">
+                <div class="config-item">
+                    <label for="server-url">服务器地址:</label>
+                    <input type="text" id="server-url" value="http://127.0.0.1:30000" placeholder="http://127.0.0.1:30000">
+                </div>
+                <div class="config-item">
+                    <label for="model-select">模型:</label>
+                    <select id="model-select">
+                        <option value="auto">自动检测</option>
+                    </select>
+                    <button id="refresh-models">刷新</button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="chat-container">
+                <div class="conversation-sidebar">
+                    <div class="sidebar-header">
+                        <h3>对话历史</h3>
+                        <button id="new-conversation">新对话</button>
+                    </div>
+                    <div class="conversation-list" id="conversation-list">
+                        <!-- 对话历史列表 -->
+                    </div>
+                </div>
+
+                <div class="chat-main">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message system-message">
+                            <div class="message-content">
+                                <p>欢迎使用 SGLang Chat Interface！</p>
+                                <p>这是一个基于 OpenAI 兼容 API 的多轮对话界面。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="input-group">
+                            <textarea id="user-input" placeholder="输入您的消息..." rows="3"></textarea>
+                            <div class="input-controls">
+                                <button id="send-button" disabled>发送</button>
+                                <button id="stop-button" style="display: none;">停止</button>
+                            </div>
+                        </div>
+                        <div class="input-options">
+                            <label>
+                                <input type="checkbox" id="stream-mode" checked>
+                                流式输出
+                            </label>
+                            <label>
+                                温度: <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7">
+                                <span id="temperature-value">0.7</span>
+                            </label>
+                            <label>
+                                最大长度: <input type="number" id="max-tokens" min="1" max="4096" value="1024">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="loading-indicator" class="loading-indicator" style="display: none;">
+        <div class="spinner"></div>
+        <span>AI 正在思考...</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
